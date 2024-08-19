@@ -317,18 +317,23 @@ namespace Content.IntegrationTests.Tests
         {
             var resultCount = 0;
             var queryPoint = entManager.AllEntityQueryEnumerator<T, TransformComponent>();
-#nullable enable
+
             while (queryPoint.MoveNext(out T? comp, out var xform))
             {
-                var spawner = (ISpawnPoint) comp;
+                // Check for null for both spawner and transform components
+                if (comp == null || xform == null)
+                    continue;
 
+                var spawner = (ISpawnPoint)comp;
+
+                // Validate the spawner and its type
                 if (spawner.SpawnType is not SpawnPointType.LateJoin
-                || xform.GridUid == null
-                || !gridUids.Contains(xform.GridUid.Value))
+                    || xform.GridUid == null
+                    || !gridUids.Contains(xform.GridUid.Value))
                 {
                     continue;
                 }
-#nullable disable
+
                 resultCount++;
                 break;
             }
