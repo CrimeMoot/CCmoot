@@ -256,29 +256,46 @@ namespace Content.IntegrationTests.Tests
 
                 if (entManager.HasComponent<StationJobsComponent>(station))
                 {
-                    // Test that the map has valid latejoin spawn points or container spawn points
-                    if (!NoSpawnMaps.Contains(mapProto))
-                    {
-                        var lateSpawns = 0;
+                     // Test that the map has valid latejoin spawn points or container spawn points
+                     if (!NoSpawnMaps.Contains(mapProto))
+                     {
+                         var lateSpawns = 0;
 
-                        lateSpawns += GetCountLateSpawn<SpawnPointComponent>(gridUids, entManager);
-                        lateSpawns += GetCountLateSpawn<ContainerSpawnPointComponent>(gridUids, entManager);
+                         lateSpawns += GetCountLateSpawn<SpawnPointComponent>(gridUids, entManager);
+                         lateSpawns += GetCountLateSpawn<ContainerSpawnPointComponent>(gridUids, entManager);
 
-                        Assert.That(lateSpawns, Is.GreaterThan(0), $"Found no latejoin spawn points on {mapProto}");
-                    }
+                         // Output the number of latejoin spawn points found
+                         Console.WriteLine($"Late spawn points found on {mapProto}: {lateSpawns}");
 
-                    // Test all availableJobs have spawnPoints
-                    // This is done inside gamemap test because loading the map takes ages and we already have it.
-                    var comp = entManager.GetComponent<StationJobsComponent>(station);
-                    var jobs = new HashSet<ProtoId<JobPrototype>>(comp.SetupAvailableJobs.Keys);
+                         Assert.That(lateSpawns, Is.GreaterThan(0), $"Found no latejoin spawn points on {mapProto}");
+                     }
 
-                    var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
-                        .Where(x => x.SpawnType == SpawnPointType.Job)
-                        .Select(x => x.Job!.Value);
+                     // Test all available jobs have spawn points
+                     // This is done inside the gamemap test because loading the map takes ages and we already have it.
+                     var comp = entManager.GetComponent<StationJobsComponent>(station);
+                     var jobs = new HashSet<ProtoId<JobPrototype>>(comp.SetupAvailableJobs.Keys);
 
-                    jobs.ExceptWith(spawnPoints);
-                    Assert.That(jobs, Is.Empty, $"There is no spawnpoints for {string.Join(", ", jobs)} on {mapProto}.");
+                     // Output the available jobs and their count
+                     Console.WriteLine($"Available jobs on {mapProto}: {string.Join(", ", jobs)} (Total: {jobs.Count})");
+
+                     var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
+                         .Where(x => x.SpawnType == SpawnPointType.Job)
+                         .Select(x => x.Job!.Value);
+
+                     // Output the jobs that have spawn points
+                     Console.WriteLine($"Jobs with spawn points on {mapProto}: {string.Join(", ", spawnPoints)}");
+
+                     jobs.ExceptWith(spawnPoints);
+
+                     // If there are jobs without spawn points, output them
+                     if (jobs.Count > 0)
+                     {
+                         Console.WriteLine($"Jobs without spawn points on {mapProto}: {string.Join(", ", jobs)}");
+                     }
+
+                     Assert.That(jobs, Is.Empty, $"There are no spawn points for {string.Join(", ", jobs)} on {mapProto}.");
                 }
+
 
                 try
                 {
