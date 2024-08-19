@@ -279,7 +279,7 @@ namespace Content.IntegrationTests.Tests
                      Console.WriteLine($"Available jobs on {mapProto}: {string.Join(", ", jobs)} (Total: {jobs.Count})");
 
                      var spawnPoints = entManager.EntityQuery<SpawnPointComponent>()
-                         .Where(x => x.SpawnType == SpawnPointType.Job)
+                         .Where(x => x.SpawnType == SpawnPointType.Job && x.Job.HasValue)
                          .Select(x => x.Job!.Value);
 
                      // Output the jobs that have spawn points
