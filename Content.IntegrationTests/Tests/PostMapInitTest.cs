@@ -317,7 +317,7 @@ namespace Content.IntegrationTests.Tests
         {
             var resultCount = 0;
             var queryPoint = entManager.AllEntityQueryEnumerator<T, TransformComponent>();
-#nullable disable
+#nullable enable
             while (queryPoint.MoveNext(out T? comp, out var xform))
             {
                 // Check for null for both spawner and transform components
@@ -333,7 +333,7 @@ namespace Content.IntegrationTests.Tests
                 {
                     continue;
                 }
-#nullable enable
+#nullable disable
                 resultCount++;
                 break;
             }
