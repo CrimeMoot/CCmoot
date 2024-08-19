@@ -296,7 +296,6 @@ namespace Content.IntegrationTests.Tests
                      Assert.That(jobs, Is.Empty, $"There are no spawn points for {string.Join(", ", jobs)} on {mapProto}.");
                 }
 
-
                 try
                 {
                     mapManager.DeleteMap(mapId);
