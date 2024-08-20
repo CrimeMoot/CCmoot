@@ -1,5 +1,6 @@
 - type: entity
   id: BaseDungeonArc
+#  abstract: true  // can ?
   name: old faith arch
   description: A fancy arch with multiple patterns. It seems to be made of bone. It seems it shouldn't be here...
   placement:
@@ -19,6 +20,8 @@
   components:
     - type: Sprite
       state: arc
+    - type: Physics
+      canCollide: false
     - type: Fixtures
       fixtures:
         fix1:
@@ -51,6 +54,8 @@
   id: DungeonArcAlt2
   parent: BaseDungeonArc
   components:
+    - type: Physics
+      canCollide: false
     - type: Sprite
       state: arc2
 
