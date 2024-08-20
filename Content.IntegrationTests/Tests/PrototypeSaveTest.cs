@@ -19,7 +19,7 @@ using Robust.Shared.Serialization.TypeSerializers.Interfaces;
 namespace Content.IntegrationTests.Tests;
 
 /// <summary>
-///     This test ensures that when an entity prototype is spawned into an un-initialized map, its component data is not
+///     This test ensure that when an entity prototype is spawned into an un-initialized map, its component data is not
 ///     modified during init. I.e., when the entity is saved to the map, its data is simply the default prototype data (ignoring transform component).
 /// </summary>
 /// <remarks>
@@ -51,10 +51,24 @@ public sealed class PrototypeSaveTest
 
         await server.WaitRunTicks(5);
 
-        // Generate list of non-abstract prototypes to test
+        //Generate list of non-abstract prototypes to test
         foreach (var prototype in prototypeMan.EnumeratePrototypes<EntityPrototype>())
         {
-            if (prototype.Abstract || pair.IsTestPrototype(prototype) || prototype.Components.ContainsKey("MapGrid") || !prototype.MapSavable || prototype.SetSuffix == "DEBUG")
+            if (prototype.Abstract)
+                continue;
+
+            if (pair.IsTestPrototype(prototype))
+                continue;
+
+            // Yea this test just doesn't work with this, it parents a grid to another grid and causes game logic to explode.
+            if (prototype.Components.ContainsKey("MapGrid"))
+                continue;
+
+            // Currently mobs and such can't be serialized, but they aren't flagged as serializable anyways.
+            if (!prototype.MapSavable)
+                continue;
+
+            if (prototype.SetSuffix == "DEBUG")
                 continue;
 
             prototypes.Add(prototype);
@@ -69,12 +83,13 @@ public sealed class PrototypeSaveTest
 
             Assert.Multiple(() =>
             {
+                //Iterate list of prototypes to spawn
                 foreach (var prototype in prototypes)
                 {
                     uid = entityMan.SpawnEntity(prototype.ID, testLocation);
                     context.Prototype = prototype;
 
-                    // Get default prototype data
+                    // get default prototype data
                     Dictionary<string, MappingDataNode> protoData = new();
                     try
                     {
@@ -97,21 +112,15 @@ public sealed class PrototypeSaveTest
 
                     var comps = new HashSet<IComponent>(entityMan.GetComponents(uid));
                     var compNames = new HashSet<string>(comps.Count);
-
                     foreach (var component in comps)
                     {
                         var compType = component.GetType();
                         var compName = compFact.GetComponentName(compType);
                         compNames.Add(compName);
 
-                        // Special handling for Physics component
-                        if (compType == typeof(PhysicsComponent))
-                        {
-                            AssertPhysicsComponent(prototype, component, context);
+                        if (compType == typeof(MetaDataComponent) || compType == typeof(TransformComponent) || compType == typeof(FixturesComponent))
                             continue;
-                        }
 
-                        // Handle other components
                         MappingDataNode compMapping;
                         try
                         {
@@ -129,9 +138,7 @@ public sealed class PrototypeSaveTest
                             var diff = compMapping.Except(protoMapping);
 
                             if (diff != null && diff.Children.Count != 0)
-                            {
                                 Assert.Fail($"Prototype {prototype.ID} modifies component on spawn: {compName}. Modified yaml:\n{diff}");
-                            }
                         }
                         else
                         {
@@ -139,7 +146,7 @@ public sealed class PrototypeSaveTest
                         }
                     }
 
-                    // Check that no components are missing
+                    // An entity may also remove components on init -> check no components are missing.
                     foreach (var (compType, comp) in prototype.Components)
                     {
                         Assert.That(compNames, Does.Contain(compType), $"Prototype {prototype.ID} removes component {compType} on spawn.");
@@ -149,20 +156,8 @@ public sealed class PrototypeSaveTest
                         entityMan.DeleteEntity(uid);
                 }
             });
-        }
+        });
         await pair.CleanReturnAsync();
-    }
-
-    private void AssertPhysicsComponent(EntityPrototype prototype, IComponent component, TestEntityUidContext context)
-    {
-        var physicsComp = component as PhysicsComponent;
-        var protoPhysicsComp = prototype.Components["Physics"].Component as PhysicsComponent;
-
-        Assert.NotNull(protoPhysicsComp, "Physics component not found in prototype");
-
-        // Check specific properties of the Physics component
-        Assert.That(physicsComp?.BodyType, Is.EqualTo(protoPhysicsComp?.BodyType), "BodyType mismatch in Physics component");
-        // Add other relevant checks based on your PhysicsComponent properties
     }
 
     public sealed class TestEntityUidContext : ISerializationContext,
@@ -192,7 +187,10 @@ public sealed class PrototypeSaveTest
         {
             if (WritingComponent != "Transform" && Prototype?.HideSpawnMenu == false)
             {
-                Assert.Fail($"Uninitialized entities should not be saving entity Uids. Component: {WritingComponent}. Prototype: {Prototype?.ID}");
+                // Maybe this will be necessary in the future, but at the moment it just indicates that there is some
+                // issue, like a non-nullable entityUid data-field. If a component MUST have an entity uid to work with,
+                // then the prototype very likely has to be a no-spawn entity that is never meant to be directly spawned.
+                Assert.Fail($"Uninitialized entities should not be saving entity Uids. Component: {WritingComponent}. Prototype: {Prototype.ID}");
             }
 
             return new ValueDataNode(value.ToString());
@@ -208,4 +206,3 @@ public sealed class PrototypeSaveTest
         }
     }
 }
-
