@@ -161,7 +161,7 @@ public sealed class PrototypeSaveTest
         Assert.NotNull(protoPhysicsComp, "Physics component not found in prototype");
 
         // Check specific properties of the Physics component
-        Assert.That(physicsComp.BodyType, Is.EqualTo(protoPhysicsComp.BodyType), "BodyType mismatch in Physics component");
+        Assert.That(physicsComp?.BodyType, Is.EqualTo(protoPhysicsComp?.BodyType), "BodyType mismatch in Physics component");
         // Add other relevant checks based on your PhysicsComponent properties
     }
 
@@ -192,7 +192,7 @@ public sealed class PrototypeSaveTest
         {
             if (WritingComponent != "Transform" && Prototype?.HideSpawnMenu == false)
             {
-                Assert.Fail($"Uninitialized entities should not be saving entity Uids. Component: {WritingComponent}. Prototype: {Prototype.ID}");
+                Assert.Fail($"Uninitialized entities should not be saving entity Uids. Component: {WritingComponent}. Prototype: {Prototype?.ID}");
             }
 
             return new ValueDataNode(value.ToString());
