@@ -52,8 +52,8 @@
 
 - type: entity
   id: DungeonArcAlt2
-  - type: Physics
-    canCollide: false
+- type: Physics
+  canCollide: false
   parent: BaseDungeonArc
   components:
     - type: Sprite
