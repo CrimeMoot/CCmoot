@@ -52,12 +52,12 @@
 
 - type: entity
   id: DungeonArcAlt2
-- type: Physics
-  canCollide: false
   parent: BaseDungeonArc
   components:
     - type: Sprite
       state: arc2
+    - type: Physics
+      canCollide: false
 
 - type: entity
   id: DungeonArcBlockage
