@@ -9,8 +9,8 @@
     - type: Sprite
       sprite: Exodus/Structures/Decoration/arcs.rsi
       drawdepth: OverMobs
-#    - type: Physics
-#      bodyType: Static
+    - type: Physics
+      bodyType: Static
     - type: Clickable
     - type: SpriteFade
 
@@ -20,6 +20,8 @@
   components:
     - type: Sprite
       state: arc
+    - type: Physics
+      canCollide: false
     - type: Fixtures
       fixtures:
         fix1:
