@@ -28,6 +28,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Kitchen;
 using Content.Shared.Players.PlayTimeTracking;
+using Content.Server.Exodus.Discord.Webhooks;;
 
 namespace Content.Server.IoC
 {
@@ -70,6 +71,8 @@ namespace Content.Server.IoC
             IoCManager.Register<ServerApi>();
             IoCManager.Register<JobWhitelistManager>();
             IoCManager.Register<PlayerRateLimitManager>();
+     
+            IoCManager.Register<WebhookBans>(); //  Exodus - 22.08.2024-banwebhook
         }
     }
 }

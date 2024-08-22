@@ -86,7 +86,9 @@ public sealed class RoleBanCommand : IConsoleCommand
         var targetUid = located.UserId;
         var targetHWid = located.LastHWId;
 
-        _bans.CreateRoleBan(targetUid, located.Username, shell.Player?.UserId, null, targetHWid, job, minutes, severity, reason, DateTimeOffset.UtcNow);
+        //start  Exodus - 22.08.2024-banwebhook
+        _bans.CreateRoleBan(targetUid, located.Username, shell.Player?.UserId, null, targetHWid, job, minutes, severity, reason, DateTimeOffset.Now);
+        //end  Exodus - 22.08.2024-banwebhook
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)

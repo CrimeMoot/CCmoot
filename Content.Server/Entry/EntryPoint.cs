@@ -35,6 +35,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Server.Exodus.Discord.Webhooks;
 
 namespace Content.Server.Entry
 {
@@ -161,6 +162,7 @@ namespace Content.Server.Entry
                 IoCManager.Resolve<IGameMapManager>().Initialize();
                 IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GameTicker>().PostInitialize();
                 IoCManager.Resolve<IBanManager>().Initialize();
+                IoCManager.Resolve<WebhookBans>().Initialize(); // Exodus 22.08.2024-banwebhook
             }
         }
 

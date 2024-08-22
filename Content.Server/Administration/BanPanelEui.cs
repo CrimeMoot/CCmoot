@@ -121,7 +121,9 @@ public sealed class BanPanelEui : BaseEui
 
         if (roles?.Count > 0)
         {
-            var now = DateTimeOffset.UtcNow;
+            //start  Exodus - 22.08.2024-banwebhook
+            var now = DateTimeOffset.Now;
+            //end  Exodus - 22.08.2024-banwebhook
             foreach (var role in roles)
             {
                 _banManager.CreateRoleBan(targetUid, target, Player.UserId, addressRange, targetHWid, role, minutes, severity, reason, now);
