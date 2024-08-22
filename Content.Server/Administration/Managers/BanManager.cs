@@ -20,7 +20,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Content.Server.Exodus.Discord.Webhooks;;
+using Content.Server.Exodus.Discord.Webhooks;
 
 namespace Content.Server.Administration.Managers;
 
