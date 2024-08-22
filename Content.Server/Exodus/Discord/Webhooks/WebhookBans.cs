@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Content.Server.Discord;
 using Content.Shared.Exodus.CCVars;
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
@@ -57,7 +58,7 @@ public sealed class WebhookBans : IPostInjectInit
             _sawmill.Error(e.Message);
         }
     }
-    
+
     public void PostInject()
     {
         _sawmill = _log.GetSawmill("DISCORD-WEBHOOK-BANS");
