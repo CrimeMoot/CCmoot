@@ -24,11 +24,11 @@ using Content.Server.ServerInfo;
 using Content.Server.ServerUpdates;
 using Content.Server.Voting.Managers;
 using Content.Server.Worldgen.Tools;
+using Content.Server.Exodus.Discord.Webhooks;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Administration.Managers;
 using Content.Shared.Kitchen;
 using Content.Shared.Players.PlayTimeTracking;
-using Content.Server.Exodus.Discord.Webhooks;;
 
 namespace Content.Server.IoC
 {
