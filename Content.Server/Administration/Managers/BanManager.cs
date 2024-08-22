@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection.PortableExecutable;
 using Content.Server.Chat.Managers;
 using Content.Server.Database;
 using Content.Server.Discord;
@@ -20,7 +21,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Server.Exodus.Discord.Webhooks;;
-using System.Reflection.PortableExecutable;
 
 namespace Content.Server.Administration.Managers;
 
