@@ -90,12 +90,12 @@ public sealed class StationSpawningSystem : SharedStationSpawningSystem
     /// <remarks>
     /// This only spawns the character, and does none of the mind-related setup you'd need for it to be playable.
     /// </remarks>
-    ublic EntityUid? SpawnPlayerCharacterOnStation(EntityUid? station, JobComponent? job, HumanoidCharacterProfile? profile, StationSpawningComponent? stationSpawning = null, bool lateJoin = true) // Exodus  20.08.2024-fix-poinstmaps-and-brigmed
+    public EntityUid? SpawnPlayerCharacterOnStation(EntityUid? station, JobComponent? job, HumanoidCharacterProfile? profile, StationSpawningComponent? stationSpawning = null)
     {
         if (station != null && !Resolve(station.Value, ref stationSpawning))
             throw new ArgumentException("Tried to use a non-station entity as a station!", nameof(station));
 
-        var ev = new PlayerSpawningEvent(job, profile, station, lateJoin); // Exodus  20.08.2024-fix-poinstmaps-and-brigmed
+        var ev = new PlayerSpawningEvent(job, profile, station);
 
         if (station != null && profile != null)
         {
@@ -310,16 +310,11 @@ public sealed class PlayerSpawningEvent : EntityEventArgs
     /// The target station, if any.
     /// </summary>
     public readonly EntityUid? Station;
-    
-    //start Exodus  20.08.2024-fix-poinstmaps-and-brigmed
-    public bool LateJoin;
-    //end Exodus  20.08.2024-fix-poinstmaps-and-brigmed
 
-    public PlayerSpawningEvent(JobComponent? job, HumanoidCharacterProfile? humanoidCharacterProfile, EntityUid? station, bool lateJoin) // Exodus  20.08.2024-fix-poinstmaps-and-brigmed
+    public PlayerSpawningEvent(JobComponent? job, HumanoidCharacterProfile? humanoidCharacterProfile, EntityUid? station)
     {
         Job = job;
         HumanoidCharacterProfile = humanoidCharacterProfile;
         Station = station;
-        LateJoin = lateJoin; // Exodus  20.08.2024-fix-poinstmaps-and-brigmed
     }
 }
