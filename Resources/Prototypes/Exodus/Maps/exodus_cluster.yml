@@ -1,4 +1,4 @@
-﻿- type: gameMap
+- type: gameMap
   id: ExodusCluster
   mapName: 'Cluster | EFS'
   mapPath: /Maps/Exodus/exodus_cluster.yml
@@ -46,7 +46,7 @@
             #security
             HeadOfSecurity: [ 1, 1 ]
             Warden: [ 1, 1 ]
-#           Brigmedic: [ 1, 1 ] # Exodus   //20.08.2024-fix-poinstmaps-and-brigmed
+            Brigmedic: [ 1, 1 ] # Exodus
             Detective: [ 1, 1 ]
             SecurityOfficer: [ 3, 3 ]
             SecurityCadet: [ 2, 2 ]
