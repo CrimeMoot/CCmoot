@@ -229,7 +229,12 @@ namespace Content.Server.GameTicking
 
             _playTimeTrackings.PlayerRolesChanged(player);
 
-            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, job, character);
+            //start - Exodus   // 20.08.2024-fix-poinstmaps-and-brigmed 
+            if (jobPrototype.AlwaysUseSpawner)
+                lateJoin = false;
+            //end - Exodus   // 20.08.2024-fix-poinstmaps-and-brigmed
+
+            var mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, job, character, lateJoin: lateJoin);
             DebugTools.AssertNotNull(mobMaybe);
             var mob = mobMaybe!.Value;
 
