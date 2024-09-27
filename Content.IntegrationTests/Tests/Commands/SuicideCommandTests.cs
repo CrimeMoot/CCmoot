@@ -278,7 +278,11 @@ public sealed class SuicideCommandTests
         {
             consoleHost.GetSessionShell(playerMan.Sessions.First()).ExecuteCommand("suicide");
             var lethalDamageThreshold = mobThresholdsComp.Thresholds.Keys.Last();
-
+           // Exodus-start fix damage test
+           // Logging the actual damage value before checking
+            Console.WriteLine($"Total Slash Damage: {damageableComp.Damage.DamageDict["Slash"]}");
+            Console.WriteLine($"Expected Lethal Damage Threshold: {lethalDamageThreshold}");
+           // Exodus-end fix damage test
             Assert.Multiple(() =>
             {
                 Assert.That(mobStateSystem.IsDead(player, mobStateComp));
